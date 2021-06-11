@@ -42,7 +42,7 @@ public class UsernameValidatorFactory implements FormActionFactory {
   private static final String PROVIDER_HELP_TEXT = "Validates usernames against a regex.";
 
   protected static final String USERNAME_VALIDATION_REGEX = "username.regex";
-  private static final String DEFAULT_VALIDATION = "^[\\w\\-\\.]+$";
+  protected static final String DEFAULT_VALIDATION = "^[\\w\\-\\.]+$";
   private static final List<ProviderConfigProperty> CONFIG_PROPERTIES = new ArrayList<ProviderConfigProperty>();
 
   @Override

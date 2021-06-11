@@ -48,7 +48,13 @@ public class UsernameValidator implements FormAction {
   @Override
   public void validate(ValidationContext context) {
     AuthenticatorConfigModel authConfig = context.getAuthenticatorConfig();
-    String validationRegex = authConfig.getConfig().get(UsernameValidatorFactory.USERNAME_VALIDATION_REGEX);
+    String validationRegex;
+
+    try {
+      validationRegex = authConfig.getConfig().get(UsernameValidatorFactory.USERNAME_VALIDATION_REGEX);
+    } catch (Exception e) {
+      validationRegex = UsernameValidatorFactory.DEFAULT_VALIDATION;
+    }
 
     MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
     List<FormMessage> errors = new ArrayList<>();
