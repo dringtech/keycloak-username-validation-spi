@@ -57,9 +57,10 @@ public class UsernameValidator implements FormAction {
     // Validate username field and store result in success
     String username = formData.getFirst(Validation.FIELD_USERNAME);
 
-    logger.info("Validating Username: " + username);
-
-    success = username.matches(validationRegex);
+    if (username != null) {
+      logger.info("Validating Username: '" + username + "' against /" + validationRegex + "/");
+      success = username.matches(validationRegex);
+    }
 
     if (success) {
       context.success();
