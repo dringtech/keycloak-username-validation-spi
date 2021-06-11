@@ -23,6 +23,7 @@
  */
 package tech.dring.keycloak;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.keycloak.Config.Scope;
@@ -39,6 +40,10 @@ public class UsernameValidatorFactory implements FormActionFactory {
   public static final String PROVIDER_ID = "username-validation";
   private static final String PROVIDER_NAME = "Username Validation";
   private static final String PROVIDER_HELP_TEXT = "Validates usernames against a regex.";
+
+  protected static final String USERNAME_VALIDATION_REGEX = "username.regex";
+  private static final String DEFAULT_VALIDATION = "^[\\w\\-\\.]+$";
+  private static final List<ProviderConfigProperty> CONFIG_PROPERTIES = new ArrayList<ProviderConfigProperty>();
 
   @Override
   public FormAction create(KeycloakSession session) {
@@ -90,7 +95,7 @@ public class UsernameValidatorFactory implements FormActionFactory {
 
   @Override
   public boolean isConfigurable() {
-    return false;
+    return true;
   }
 
   @Override
@@ -98,8 +103,20 @@ public class UsernameValidatorFactory implements FormActionFactory {
     return false;
   }
 
+  // Configuration
+  static {
+    ProviderConfigProperty property;
+    property = new ProviderConfigProperty();
+    property.setName(USERNAME_VALIDATION_REGEX);
+    property.setDefaultValue(DEFAULT_VALIDATION);
+    property.setLabel("Username validation Regex");
+    property.setType(ProviderConfigProperty.STRING_TYPE);
+    property.setHelpText("Regular expression");
+    CONFIG_PROPERTIES.add(property);
+  }
+
   @Override
   public List<ProviderConfigProperty> getConfigProperties() {
-    return null;
+    return CONFIG_PROPERTIES;
   }
 }

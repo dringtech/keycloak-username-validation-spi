@@ -33,6 +33,7 @@ import org.keycloak.authentication.FormAction;
 import org.keycloak.authentication.FormContext;
 import org.keycloak.authentication.ValidationContext;
 import org.keycloak.forms.login.LoginFormsProvider;
+import org.keycloak.models.AuthenticatorConfigModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.models.UserModel;
@@ -42,11 +43,13 @@ import org.keycloak.services.validation.Validation;
 
 public class UsernameValidator implements FormAction {
 
-  private static final String USERNAME_VALIDATION = "^[\\w\\-\\.]+$";
   private static final Logger logger = Logger.getLogger(UsernameValidator.class);
 
   @Override
   public void validate(ValidationContext context) {
+    AuthenticatorConfigModel authConfig = context.getAuthenticatorConfig();
+    String validationRegex = authConfig.getConfig().get(UsernameValidatorFactory.USERNAME_VALIDATION_REGEX);
+
     MultivaluedMap<String, String> formData = context.getHttpRequest().getDecodedFormParameters();
     List<FormMessage> errors = new ArrayList<>();
     boolean success = false;
@@ -56,7 +59,7 @@ public class UsernameValidator implements FormAction {
 
     logger.info("Validating Username: " + username);
 
-    success = username.matches(USERNAME_VALIDATION);
+    success = username.matches(validationRegex);
 
     if (success) {
       context.success();
